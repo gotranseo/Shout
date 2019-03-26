@@ -119,17 +119,17 @@ public class SSH {
 
 public extension SSH {
     @available(*, deprecated, message: "SSH.Session has been renamed SSH")
-    public typealias Session = SSH
+    typealias Session = SSH
     
     @available(*, deprecated, message: "SSH.AuthMethod has been renamed SSHAuthMethod")
-    public typealias AuthMethod = SSHAuthMethod
+    typealias AuthMethod = SSHAuthMethod
     
     @available(*, deprecated, message: "SSH.Password has been renamed SSHPassword")
-    public typealias Password = SSHPassword
+    typealias Password = SSHPassword
     
     @available(*, deprecated, message: "SSH.Agent has been renamed SSHAgent")
-    public typealias Agent = SSHAgent
+    typealias Agent = SSHAgent
     
     @available(*, deprecated, message: "SSH.Key has been renamed SSHKey")
-    public typealias Key = SSHKey
+    typealias Key = SSHKey
 }
