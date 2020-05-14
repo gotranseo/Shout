@@ -1,5 +1,5 @@
-module CSSH {
-    umbrella header "cssh.h"
-    link "ssh2"
-    export *
+module CSSH [system] {
+  header "shim.h"
+  link "ssh2"
+  export *
 }

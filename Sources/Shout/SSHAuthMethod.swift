@@ -6,16 +6,19 @@
 //
 
 import Foundation
-import Bindings
 
 public protocol SSHAuthMethod {
     func authenticate(ssh: SSH, username: String) throws
 }
 
+/// Password-based authentication method
 public struct SSHPassword: SSHAuthMethod {
     
     let password: String
     
+    /// Creates a new password-based authentication using the given password
+    ///
+    /// - Parameter password: the password to authenticate with
     public init(_ password: String) {
         self.password = password
     }
@@ -26,16 +29,18 @@ public struct SSHPassword: SSHAuthMethod {
     
 }
 
+/// Agent-based authentication method
 public struct SSHAgent: SSHAuthMethod {
     
+    /// Creates a new agent-based authentication
     public init() {}
     
     public func authenticate(ssh: SSH, username: String) throws {
-        let agent = try ssh.session.agent()
+        let agent = try ssh.session.openAgent()
         try agent.connect()
         try agent.listIdentities()
         
-        var last: Bindings.Agent.PublicKey? = nil
+        var last: Agent.PublicKey? = nil
         var success: Bool = false
         while let identity = try agent.getIdentity(last: last) {
             if agent.authenticate(username: username, key: identity) {
@@ -45,18 +50,25 @@ public struct SSHAgent: SSHAuthMethod {
             last = identity
         }
         guard success else {
-            throw LibSSH2Error(code: -1, message: "Failed to authenticate using the agent")
+            throw SSHError.genericError("failed to authenticate using the agent")
         }
     }
     
 }
 
+/// Key-based authentication method
 public struct SSHKey: SSHAuthMethod {
     
     public let privateKey: String
     public let publicKey: String
     public let passphrase: String?
     
+    /// Creates a new key-based authentication
+    ///
+    /// - Parameters:
+    ///   - privateKey: the path to the private key
+    ///   - publicKey: the path to the public key; defaults to private key path + ".pub"
+    ///   - passphrase: the passphrase encrypting the key; defaults to nil
     public init(privateKey: String, publicKey: String? = nil, passphrase: String? = nil) {
         self.privateKey = NSString(string: privateKey).expandingTildeInPath
         if let publicKey = publicKey {

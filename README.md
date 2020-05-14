@@ -1,6 +1,6 @@
 # Shout
 
-[![Build Status](https://travis-ci.org/jakeheis/Shout.svg?branch=master)](https://travis-ci.org/jakeheis/Shout)
+[![Build Status](https://github.com/jakeheis/Shout/workflows/Test/badge.svg)](https://github.com/jakeheis/Shout/actions)
 
 SSH made easy in Swift
 
@@ -24,7 +24,7 @@ Add Shout as a dependency to your `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/jakeheis/Shout", from: "0.4.0")
+    .package(url: "https://github.com/jakeheis/Shout", from: "0.5.0")
 ]
 ```
 
@@ -70,6 +70,23 @@ You can remotely execute a command one of two ways. `session.execute` will print
 ```swift
 let status = try session.execute("ls -a")
 let (status, output) = try session.capture("pwd")
+```
+
+### Send files
+
+You can send a local file to a remote path, similar to the `scp` command line program, with `sendFile`.
+```swift
+let status = try session.sendFile(localURL: myLocalFile, remotePath: "~/cats.png")
+```
+
+### SFTP
+
+You can open an SFTP session with the remote server:
+
+```swift
+let sftp = try session.openSftp()
+try sftp.download(remotePath: "/a/remote/file", localURL: myLocalFile)
+try sftp.upload(localURL: myLocalFile, remotePath: "~/cats.png")
 ```
 
 ### Configuration

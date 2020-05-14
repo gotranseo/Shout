@@ -8,12 +8,11 @@ let package = Package(
         .library(name: "Shout", targets: ["Shout"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/IBM-Swift/BlueSocket", from: "0.12.68"),
+        .package(url: "https://github.com/IBM-Swift/BlueSocket", from: "1.0.46"),
     ],
     targets: [
         .systemLibrary(name: "CSSH", pkgConfig: "libssh2"),
-        .target(name: "Bindings", dependencies: ["Socket", "CSSH"]),
-        .target(name: "Shout", dependencies: ["Bindings", "Socket"]),
+        .target(name: "Shout", dependencies: ["CSSH", "Socket"]),
         .testTarget(name: "ShoutTests", dependencies: ["Shout"]),
     ]
 )
